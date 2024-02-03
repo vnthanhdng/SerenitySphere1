@@ -9,7 +9,6 @@ const UserSchema = new mongoose.Schema({
       feedUrl: String,
       category: String,
       favicon: String,
-      twitterId: String,
       feedId: String,
     },
   ],

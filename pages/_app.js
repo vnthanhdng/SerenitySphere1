@@ -40,27 +40,18 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
-          content="The one-stop shop for content you love"
+          content="Oasis of calm"
         />
         <meta name="keywords" content="productivity" />
         <meta name="theme-color" content="#fcf8f4" />
-        <meta property="og:title" content="Pocket Feed" />
+        <meta property="og:title" content="Serenity Sphere" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://pocket-feed.vercel.app" />
+        <meta property="og:url" content="" />
         <meta
           property="og:description"
-          content="The one-stop shop for content you love"
+          content="Oasis of calm"
         />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:image"
-          content="https://pocket-feed.vercel.app/cover.png"
-        />
-        <meta name="twitter:title" content="Pocket Feed" />
-        <meta
-          name="twitter:description"
-          content="The one-stop shop for content you love"
-        />
+      
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" href="/favicon.png" />

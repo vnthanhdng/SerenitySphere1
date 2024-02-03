@@ -2,10 +2,7 @@ import { useState } from "react";
 import router from "next/router";
 
 import toast, { Toaster } from "react-hot-toast";
-import { nanoid } from "nanoid";
-import { withPageAuthRequired, useUser } from "@auth0/nextjs-auth0";
-
-import ImageWithFallback from "../components/ImageWithFallback";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 const toastStyles = {
   fontSize: "1.6rem",
@@ -15,215 +12,111 @@ const toastStyles = {
 };
 
 function Add() {
-  const { user } = useUser();
-
-  console.log(user?.sub);
-
-  const [formState, setFormState] = useState({
-    url: "",
-    category: "youtube",
+  const [entry, setEntry] = useState({
+    title: "",
+    content: "",
+    category: "self",
+    image: ""
   });
-
-  const [feedData, setFeedData] = useState({});
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const isObjectEmpty = Object.keys(feedData).length === 0;
-
-  const addFeed = async () => {
-    toast.loading("Adding...", {
-      id: "add",
-      style: toastStyles,
-    });
-    console.log("CLICKED");
-    const feedId = nanoid();
-    try {
-      const res = await fetch("/api/handleUser");
-      const data = await res.json();
-      console.log("USER_FEED_LIST", data);
-      console.log(data?.[0]?.feeds);
-
-      //CHECK IF FEED ALREADY EXISTS
-      if (data?.[0]?.feeds) {
-        const checkFeedExists = data[0].feeds.some(
-          (feed) => feed.title === feedData.title
-        );
-        if (checkFeedExists) {
-          toast.remove("add");
-          toast("Feed Already Exists", {
-            style: toastStyles,
-          });
-          return;
-        }
-      }
-
-      //UPDATE THE USER WITH A NEW FEED
-      if (data.length) {
-        console.log("USER ALREADY EXISTS");
-        const res = await fetch("/api/handleUser", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: feedData.title,
-            url: feedData.url || formState.url,
-            feedUrl: feedData.feed,
-            favicon: feedData.favicon,
-            category: formState.category,
-            twitterId: feedData.twitterId,
-            feedId,
-          }),
-        });
-        console.log(res);
-        if (!res.ok) {
-          throw new Error("Something went wrong");
-        }
-        toast.remove("add");
-        router.push(`/feed/${formState.category}`);
-        return;
-      }
-
-      //IF USER DOESN'T EXIST CREATE A NEW USER
-      if (!data.length) {
-        console.log("USER DOESN'T EXIST");
-        const res = await fetch("/api/handleUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user: user?.sub,
-            feeds: [
-              {
-                title: feedData.title,
-                url: feedData.url || formState.url,
-                feedUrl: feedData.feed,
-                favicon: feedData.favicon,
-                category: formState.category,
-                twitterId: feedData.twitterId,
-                feedId,
-              },
-            ],
-          }),
-        });
-        if (!res.ok) {
-          throw new Error("Something went wrong");
-        }
-        toast.remove("add");
-        router.push(`/feed/${formState.category}`);
-      }
-    } catch (err) {
-      console.log("ERROR");
-      toast.remove("add");
-      toast.error(err.message, {
-        style: toastStyles,
-      });
-    }
-  };
-
   const handleChange = (e) => {
-    setFeedData({});
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
+    setEntry({
+      ...entry,
+      [e.target.name]: e.target.value
     });
   };
 
   const handleSubmit = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
+    setIsLoading(true);
+    toast.loading("Adding entry...", {
+      id: "add-entry",
+      style: toastStyles
+    });
 
     try {
-      const res = await fetch("/api/findFeed", {
+      // Replace with your API endpoint to add an entry
+      const res = await fetch("/api/addEntry", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(formState),
+        body: JSON.stringify(entry)
       });
-      console.log(res);
-      const responseData = await res.json();
-      console.log(responseData);
-      if (!res.ok) {
-        throw new Error(responseData.msg);
-      }
-      setFeedData(responseData);
-      setIsLoading(false);
+
+      if (!res.ok) throw new Error("Failed to add entry");
+
+      toast.success("Entry added successfully", {
+        style: toastStyles
+      });
+      router.push(`/feed/${entry.category}`);
     } catch (err) {
-      setIsLoading(false);
       toast.error(err.message, {
-        style: toastStyles,
+        style: toastStyles
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  console.log("TWITTER_ID", feedData.twitterId);
-
   return (
     <div className="add">
-      <h2 className="add__heading">Add a Feed</h2>
+      <h2 className="add__heading">Add an Entry</h2>
       <form className="add__form" onSubmit={handleSubmit}>
-        <label htmlFor="url" className="add__label">
-          Please enter a URL
-        </label>
+        <label htmlFor="title" className="add__label">Title</label>
         <input
-          type="url"
-          placeholder="https://example.com"
+          type="text"
+          placeholder="Entry Title"
           className="add__input"
-          id="url"
-          name="url"
+          id="title"
+          name="title"
           required
           onChange={handleChange}
         />
-        <label htmlFor="categories" className="add__label">
-          Select a category
-        </label>
+
+        <label htmlFor="content" className="add__label">Content</label>
+        <br></br>
+        <textarea
+          placeholder="Write your content here"
+          className="add__textarea"
+          id="content"
+          name="content"
+          required
+          onChange={handleChange}
+        />
+        <br></br>
+
+        <label htmlFor="categories" className="add__label">Select a Category</label>
         <select
           name="category"
           id="categories"
           className="add__select"
-          value={formState.category}
+          value={entry.category}
           onChange={handleChange}
         >
-          <option value="youtube">YouTube</option>
-          {/* <option value="twitter">Twitter</option> */}
-          <option value="reddit">Reddit</option>
-          <option value="news">News</option>
-          <option value="blog">Blog</option>
-          <option value="podcast">Podcast</option>
+          <option value="self">Me</option>
+          <option value="people">People</option>
+          <option value="spaces">Spaces</option>
+          <option value="media">Media</option>
+          <option value="hobbies">Hobbies</option>
         </select>
-        {isObjectEmpty && (
-          <button className="add__btn">
-            {isLoading ? <div className="spinner"></div> : "Continue"}
-          </button>
-        )}
-      </form>
-      {!isObjectEmpty && (
-        <div className="add__feed">
-          {feedData.favicon ? (
-            <ImageWithFallback
-              src={feedData.favicon}
-              alt="logo"
-              className="add__feed-icon"
-              width="32"
-              height="32"
-              quality={80}
-              title={feedData.title}
-            />
-          ) : (
-            <div className="add__feed-image add__default-img">
-              {feedData.title.split("")[0]}
-            </div>
-          )}
 
-          <h2 className="add__feed-title">{feedData.title}</h2>
-          <p className="add__feed-url">{feedData.url || formState.url}</p>
-          <button className="add__btn" onClick={addFeed}>
-            Add
-          </button>
-        </div>
-      )}
+        <label htmlFor="image" className="add__label">Image URL (optional)</label>
+        <input
+          type="text"
+          placeholder="https://example.com/image.jpg"
+          className="add__input"
+          id="image"
+          name="image"
+          onChange={handleChange}
+        />
+
+        <button className="add__btn" type="submit">
+          {isLoading ? <div className="spinner"></div> : "Add Entry"}
+        </button>
+      </form>
       <Toaster position="bottom-center" />
     </div>
   );

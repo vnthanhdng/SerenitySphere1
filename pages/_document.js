@@ -14,8 +14,8 @@ class MyDocument extends Document {
           />
           <script
             defer
-            data-domain="pocket-feed.vercel.app"
-            src="https://plausible.io/js/plausible.js"
+            data-domain=""
+            src=""
           ></script>
         </Head>
         <body>

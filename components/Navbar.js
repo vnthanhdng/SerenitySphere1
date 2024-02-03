@@ -52,7 +52,7 @@ function Navbar() {
 
   const Logo = () => (
     <Link href="/" className="navigation__logo">
-      <img src="/logo.png" width="60" height="60" alt="logo" />
+      <img src="/" width="60" height="60" alt="logo" />
     </Link>
   );
 
@@ -108,7 +108,7 @@ function Navbar() {
       ) : null}
 
       {router.pathname !== "/add" ? (
-        <Link href="/add" className="navigation__add u-mr3" title="Add a feed">
+        <Link href="/add" className="navigation__add u-mr3" title="Add a journal">
           <AddToList size={28} />
         </Link>
       ) : null}

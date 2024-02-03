@@ -1,77 +1,53 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-
-import { Blog } from "@styled-icons/fa-solid/Blog";
-import { Reddit, Youtube } from "@styled-icons/fa-brands";
-import { Podcast } from "@styled-icons/fa-solid/Podcast";
-import { News } from "@styled-icons/boxicons-regular/News";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Person, People, Tv, Gamepad } from '@styled-icons/material';
+import {LocationDot} from '@styled-icons/fa-solid';
 
 function SideNav() {
   const router = useRouter();
   const category = router.query.category;
 
   return (
-    <div className="sidenav">
-      <ul className="sidenav__list">
-        <li className="sidenav__item">
-          <Link
-            href="/feed/blog"
-            className={`sidenav__link ${category === "blog" ? "active" : ""}`}
-          >
-            <Blog size={24} title="Blog" />
-            <span className="u-mt1">Blog</span>
+    <div className='sidenav'>
+      <ul className='sidenav__list'>
+        <li className='sidenav__item'>
+          <Link href='/feed/self'>
+            <div className={`sidenav__link ${category === 'self' ? 'active' : ''}`}>
+              <Person size={24} title='Me' />
+              <span className='u-mt1'>Me</span>
+            </div>
           </Link>
         </li>
-        {/* <li className="sidenav__item">
-          <Link href="/feed/twitter">
-            <a
-              className={`sidenav__link ${
-                category === "twitter" ? "active" : ""
-              }`}
-            >
-              <Twitter size={24} title="twitter" />
-              <span className="u-mt1">Twitter</span>
-            </a>
-          </Link>
-        </li> */}
-        <li className="sidenav__item">
-          <Link
-            href="/feed/reddit"
-            className={`sidenav__link ${category === "reddit" ? "active" : ""}`}
-          >
-            <Reddit size={24} />
-            <span className="u-mt1">Reddit</span>
+        <li className='sidenav__item'>
+          <Link href='/feed/people'>
+            <div className={`sidenav__link ${category === 'people' ? 'active' : ''}`}>
+              <People size={24} title='People' />
+              <span className='u-mt1'>People</span>
+            </div>
           </Link>
         </li>
-        <li className="sidenav__item">
-          <Link
-            href="/feed/podcast"
-            className={`sidenav__link ${
-              category === "podcast" ? "active" : ""
-            }`}
-          >
-            <Podcast size={24} />
-            <span className="u-mt1">Podcast</span>
+        <li className='sidenav__item'>
+          <Link href='/feed/spaces'>
+            <div className={`sidenav__link ${category === 'spaces' ? 'active' : ''}`}>
+              <LocationDot size={24} title='Spaces' />
+              <span className='u-mt1'>Spaces</span>
+            </div>
           </Link>
         </li>
-        <li className="sidenav__item">
-          <Link
-            href="/feed/news"
-            className={`sidenav__link ${category === "news" ? "active" : ""}`}
-          >
-            <News size={24} />
-            <span className="u-mt1">News</span>
+        <li className='sidenav__item'>
+          <Link href='/feed/media'>
+            <div className={`sidenav__link ${category === 'media' ? 'active' : ''}`}>
+              <Tv size={24} title='Media' />
+              <span className='u-mt1'>Media</span>
+            </div>
           </Link>
         </li>
-        <li className="sidenav__item">
-          <Link
-            href="/feed/youtube"
-            className={`sidenav__link ${
-              category === "youtube" ? "active" : ""
-            }`}
-          >
-            <Youtube size={24} />
-            <span className="u-mt1">YouTube</span>
+        <li className='sidenav__item'>
+          <Link href='/feed/hobbies'>
+            <div className={`sidenav__link ${category === 'hobbies' ? 'active' : ''}`}>
+              <Gamepad size={24} title='Hobbies' />
+              <span className='u-mt1'>Hobbies</span>
+            </div>
           </Link>
         </li>
       </ul>

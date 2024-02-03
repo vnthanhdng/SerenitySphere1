@@ -70,32 +70,21 @@ function Home() {
         <motion.div className="header__text-box">
           <motion.h1 className="heading-primary">
             <motion.span variants={item} className="heading-primary--main">
-              More Signal. Less Noise.
+              Unlimited Space. 
             </motion.span>
             <motion.span variants={item} className="heading-primary--sub">
-              The one stop shop for content you love.
+              A diary for yourself, your peoples, and your places.
             </motion.span>
           </motion.h1>
           <motion.div className="header__btns" variants={fadeInLeft}>
             <a href="/api/auth/login" className="btn-main">
-              <span style={{ marginRight: "1.5rem" }}>TRY NOW</span>
+              <span style={{ marginRight: "1.5rem" }}>START NOW</span>
               <ChevronRight size={32} className="icon-chevron" />
             </a>
-            <button className="btn-video" onClick={() => setIsOpen(true)}>
-              <Video size={32} />
-              <span style={{ marginLeft: "1.5rem" }}>Watch Demo</span>
-            </button>
+            
           </motion.div>
           <motion.p className="maker" variants={fadeInLeft}>
-            Made with love by{" "}
-            <a
-              href="https://twitter.com/geekychakri"
-              rel="noopener norefereer"
-              target="__blank"
-              className="maker__connect"
-            >
-              Chakri
-            </a>
+            Made with friendship and love by Squirrel Squad
           </motion.p>
         </motion.div>
         <motion.div className="header__img" variants={fadeInRight}>
@@ -107,13 +96,7 @@ function Home() {
           />
         </motion.div>
       </motion.header>
-      <ModalVideo
-        channel="youtube"
-        autoplay
-        isOpen={isOpen}
-        videoId="ulBqEc0dbPI"
-        onClose={() => setIsOpen(false)}
-      />
+      
     </>
   );
 }
@@ -127,7 +110,7 @@ export async function getServerSideProps(context) {
   if (session?.user) {
     return {
       redirect: {
-        destination: "/feed/blog",
+        destination: "/feed/self",
         permanent: false,
       },
     };
